@@ -1,0 +1,92 @@
+<h4>Formularios <small>template</small></h4>
+<hr>
+<form (ngSubmit)="save(form)" #form="ngForm" novalidate>
+
+    <div>
+        <!-- ngClass permite agregar una clase al objeto HTML si se cumple una condición -->
+        <div class="form-group row" [ngClass]="{'has-danger': (nombre.errors?.required || nombre.errors?.minlength) && nombre.touched}">
+            <label class="col-2 col-form-label">Nombre</label>
+            <div class="col-8">
+
+                <input class="form-control" type="text" placeholder="Nombre" name="nombre" [(ngModel)]="usuario.nombre" required minlength="3" #nombre="ngModel">
+                <!-- Usamos nombre.errors?.required "?" para validar si existe una propiedad -->
+                <!-- Usamos nombre.touched para validar si el campo ya fue tocado por el usuario -->
+                <div *ngIf="nombre.errors?.required && nombre.touched" class="form-control-feedback">Este campo es requerido</div>
+                <div *ngIf="nombre.errors?.minlength && nombre.touched" class="form-control-feedback">Por lo menos {{ nombre.errors.minlength.requiredLength }} caracteres</div>
+            </div>
+        </div>
+
+        <!-- ngClass permite agregar una clase al objeto HTML si se cumple una condición -->
+        <div class="form-group row" [ngClass]="{'has-danger': (apellido.errors?.required) && apellido.touched}">
+            <label class="col-2 col-form-label">Apellido</label>
+            <div class="col-8">
+
+                <input class="form-control" type="text" placeholder="Apellido" name="apellido" [(ngModel)]="usuario.apellido" required #apellido="ngModel">
+                <!-- Usamos apellido.errors?.required "?" para validar si existe una propiedad -->
+                <!-- Usamos apellido.touched para validar si el campo ya fue tocado por el usuario -->
+                <div *ngIf="apellido.errors?.required && apellido.touched" class="form-control-feedback">Este campo es requerido</div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ngClass permite agregar una clase al objeto HTML si se cumple una condición -->
+    <div class="form-group row" [ngClass]="{'has-danger': (email.errors?.required || email.errors?.pattern) && email.touched}">
+        <label class="col-2 col-form-label">Correo</label>
+        <div class="col-md-8">
+
+            <input class="form-control" type="email" placeholder="Correo electrónico" name="email" [(ngModel)]="usuario.email" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" #email="ngModel">
+            <!-- Usamos email.errors?.required "?" para validar si existe una propiedad -->
+            <!-- Usamos email.touched para validar si el campo ya fue tocado por el usuario -->
+            <div *ngIf="email.errors?.required && email.touched" class="form-control-feedback">Este campo es requerido</div>
+            <div *ngIf="email.errors?.pattern && email.touched" class="form-control-feedback">El campo debe tener el patrón {{ email.errors.pattern.requiredPattern }}</div>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-2 col-form-label">País</label>
+        <div class="col-md-8">
+            <select name="pais" class="form-control" [(ngModel)]="usuario.pais">
+                <option value="">Seleccione un país</option>
+                <option *ngFor="let pais of paises" [value]="pais.codigo">{{ pais.desc }}</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-2 col-form-label">Genero</label>
+        <div class="col-md-8">
+            <label class="custom-control custom-radio" *ngFor="let genero of generos">
+                <input type="radio" name="genero" class="custom-control-input" [(ngModel)]="usuario.genero" [value]="genero.codigo">
+                <span class="custom-control-indicator"></span>
+                <span class="custom-control-description">{{ genero.desc }}</span>
+            </label>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-2 col-form-label">Aceptar</label>
+        <div class="col-md-8" [ngClass]="{'has-danger': (aceptar.errors?.required) && aceptar.touched}">
+            <label class="custom-control custom-checkbox">
+                <input type="checkbox" name="aceptar" class="custom-control-input" [(ngModel)]="usuario.aceptar" required #aceptar="ngModel">
+                <span class="custom-control-indicator"></span>
+                <span class="custom-control-description">Acepta las condiciones</span>
+            </label>
+            <!-- Usamos aceptar.errors?.required "?" para validar si existe una propiedad -->
+            <!-- Usamos aceptar.touched para validar si el campo ya fue tocado por el usuario -->
+            <div *ngIf="aceptar.errors?.required && aceptar.touched" class="form-control-feedback">Este campo es requerido</div>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-2 col-form-label">&nbsp;</label>
+        <div class="input-group col-md-8">
+            <button type="submit" class="btn btn-outline-primary" [disabled]="!form.valid">Guardar</button>
+        </div>
+    </div>
+
+</form>
+
+<pre>
+    {{ usuario | json }}
+</pre>

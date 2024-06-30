@@ -1,0 +1,116 @@
+<h4>Formularios <small>data</small></h4>
+<hr>
+<form [formGroup]="form" (ngSubmit)="save()">
+
+    <div formGroupName="nombreCompleto">
+
+        <div class="form-group row" [ngClass]="{'has-danger': !form.controls['nombreCompleto'].controls['nombre'].valid && form.controls['nombreCompleto'].controls['nombre'].touched}">
+            <label class="col-2 col-form-label">Nombre</label>
+            <div class="col-8">
+                <!-- Usamos 'formControlName=nombre_campo' para enlazar el HTMl al formgroup generado desde el componente.
+                     "Nombre_Campo" debe coincidir con el nombre del atributo generado en el formGroup
+                 -->
+                <input class="form-control" type="text" placeholder="Nombre" formControlName="nombre">
+                <div *ngIf="form.get('nombreCompleto.nombre').errors?.required && form.get('nombreCompleto.nombre').touched" class="form-control-feedback">
+                    El nombre es obligatorio
+                </div>
+                <div *ngIf="form.get('nombreCompleto.nombre').errors?.minlength && form.get('nombreCompleto.nombre').touched" class="form-control-feedback">
+                    Por lo menos {{ form.get('nombreCompleto.nombre').errors.minlength.requiredLength }} caracteres
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group row" [ngClass]="{'has-danger': !form.get('nombreCompleto.apellido').valid && form.get('nombreCompleto.apellido').touched}">
+            <label class="col-2 col-form-label">Apellido</label>
+            <div class="col-8">
+                <!-- Usamos 'formControlName=nombre_campo' para enlazar el HTMl al formgroup generado desde el componente.
+                     "Nombre_Campo" debe coincidir con el nombre del atributo generado en el formGroup
+                 -->
+                <input class="form-control" type="text" placeholder="Apellido" formControlName="apellido">
+                <div *ngIf="form.get('nombreCompleto.apellido').errors?.required && form.get('nombreCompleto.apellido').touched" class="form-control-feedback">
+                    El apellido es obligatorio
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="form-group row" [ngClass]="{'has-danger': !form.get('email').valid && form.get('email').touched}">
+        <label class="col-2 col-form-label">Correo</label>
+        <div class="col-md-8">
+            <!-- Usamos 'formControlName=nombre_campo' para enlazar el HTMl al formgroup generado desde el componente.
+                "Nombre_Campo" debe coincidir con el nombre del atributo generado en el formGroup
+            -->
+            <input class="form-control" type="email" placeholder="Correo electrónico" formControlName="email">
+            <div *ngIf="form.controls['email'].errors?.required && form.controls['email'].touched" class="form-control-feedback">
+                El correo es obligatorio
+            </div>
+            <div *ngIf="form.controls['email'].errors?.pattern && form.controls['email'].touched" class="form-control-feedback">
+                El correo debe tener el siguiente patron {{ form.controls['email'].errors.pattern.requiredPattern }}
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group row" [ngClass]="{'has-danger': !form.get('username').valid && form.get('username').touched && !form.controls['username'].pending}">
+        <label class="col-2 col-form-label">Nombre Usuario</label>
+        <div class="col-md-8">
+            <!-- Usamos 'formControlName=nombre_campo' para enlazar el HTMl al formgroup generado desde el componente.
+                        "Nombre_Campo" debe coincidir con el nombre del atributo generado en el formGroup
+                    -->
+            <input class="form-control" type="text" placeholder="Nombre Usuario" formControlName="username">
+            <div *ngIf="form.controls['username'].errors?.required && form.controls['username'].touched" class="form-control-feedback">
+                El nombre de usuario es obligatorio
+            </div>
+            <div *ngIf="form.controls['username'].errors?.existe && form.controls['username'].touched" class="form-control-feedback">
+                El usuario ya existe
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group row" [ngClass]="{'has-danger': !form.get('password').valid && form.get('password').touched}">
+        <label class="col-2 col-form-label">Contraseña</label>
+        <div class="col-md-8">
+            <!-- Usamos 'formControlName=nombre_campo' para enlazar el HTMl al formgroup generado desde el componente.
+                    "Nombre_Campo" debe coincidir con el nombre del atributo generado en el formGroup
+                -->
+            <input class="form-control" type="password" placeholder="Contraseña" formControlName="password">
+            <div *ngIf="form.controls['password'].errors?.required && form.controls['password'].touched" class="form-control-feedback">
+                La contraseña es obligatoria
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group row" [ngClass]="{'has-danger': !form.get('passwordConfirm').valid && form.get('passwordConfirm').touched}">
+        <label class="col-2 col-form-label">Confirmar Contraseña</label>
+        <div class="col-md-8">
+            <!-- Usamos 'formControlName=nombre_campo' para enlazar el HTMl al formgroup generado desde el componente.
+                        "Nombre_Campo" debe coincidir con el nombre del atributo generado en el formGroup
+                    -->
+            <input class="form-control" type="password" placeholder="Confirmar Contraseña" formControlName="passwordConfirm">
+            <div *ngIf="form.controls['passwordConfirm'].errors?.required && form.controls['passwordConfirm'].touched" class="form-control-feedback">
+                La confirmación de la contraseña es obligatoria
+            </div>
+            <div *ngIf="form.controls['passwordConfirm'].errors?.notequal && form.controls['passwordConfirm'].touched" class="form-control-feedback">
+                Las contraseñas no coinciden
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group row" formArrayName="pasatiempos">
+        <label class="col-2 col-form-label">Pasatiempos</label>
+        <div class="col-md-8">
+            <input class="form-control" type="text" *ngFor="let item of form.controls['pasatiempos'].controls; let i = index" [formControlName]="i">
+        </div>
+    </div>
+
+    <button (click)="agregarPasatiempo()" type="button" class="btn btn-success">+</button>
+
+    <div class="form-group row">
+        <label class="col-2 col-form-label">&nbsp;</label>
+        <div class="input-group col-md-8">
+            <button type="submit" class="btn btn-outline-primary">Guardar</button>
+        </div>
+    </div>
+    {{ form.valid }}
+    <br> {{ form.status }}
+</form>
